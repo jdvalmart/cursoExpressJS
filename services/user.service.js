@@ -20,7 +20,14 @@ class UserService {
       }
   }
 
-  create(){}
+  create(data){
+    const newUser = {
+      id: faker.string.uuid(),
+      ...data
+    }
+    this.users.push(newUser)
+    return newUser
+  }
 
   find(){
     return this.users
@@ -30,9 +37,27 @@ class UserService {
     return this.users.find(item => item.id === id)
   }
 
-  update() {}
+  update(id, changes) {
+    const index = this.users.findIndex( item => item.id === id)
+    if (index === -1) {
+      throw new Error ('Usuario no encontrdo')
+  }
+  const user = this.users[index]
+  this.users[index]={
+    ...user,
+    ...changes
+  }
+  return this.users[index]
+}
 
-  delete(){}
+  delete(id){
+    const index = this.users.findIndex(item => item.id === id)
+    if (index === -1) {
+      throw new Error ('usuario no encontrado')
+    }
+    this.users.splice(index, 1)
+    return {id}
+  }
 }
 
 module.exports = UserService
