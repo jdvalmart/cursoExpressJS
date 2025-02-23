@@ -1,7 +1,5 @@
 const express = require ('express')
-
 const cors = require('cors')
-
 const routerApi = require ('./routes')
 
 const {logErrors,errorHandler,boomErrorHandler} = require('./middlewares/error.handler')
@@ -24,9 +22,11 @@ const options = {
 }
 app.use(cors(options))
 
-app.get('api/', (req, res)=>{
+app.get('/api', (req, res)=>{
   res.send('Mi servidor en express')
 })
+
+
 
 routerApi(app)
 
@@ -37,8 +37,9 @@ app.use(errorHandler)
 
 
 app.listen(port, ()=> {
-  console.log('corriendo en el puerto', port)
+  console.log('corriendo en el puerto' + ' ' + port)
 })
+
 
 
 
