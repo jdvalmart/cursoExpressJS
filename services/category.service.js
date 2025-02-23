@@ -1,5 +1,6 @@
 const express = require ('express')
 const {faker} = require('@faker-js/faker')
+const boom = require('@hapi/boom')
 
 
 class CategoryService {
@@ -31,14 +32,26 @@ class CategoryService {
   }
 
   find(){
+    return new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+          resolve(this.categories)
+        },2000)
+    })
     return this.categories
   }
 
-  findOne(id){
-    return this.categories.find(item => item.id === id)
+  async findOne(id){
+    const category = this.categories.find(item => item.id === id)
+    if(!category){
+      throw boom.notFound('caegoria no encontrada')
+    }
+    if (category.isBlock){
+      throw boom.conflict('categoria bloqueada')
+    }
+    return category
   }
 
-  update(id, changes) {
+  async update(id, changes) {
     const index = this.categories.findIndex(item => item.id === id)
     if (index === -1) {
       throw new Error('categoria no encontrada')
@@ -51,7 +64,7 @@ class CategoryService {
     return this.categories[index]
   }
 
-  delete(id){
+  async delete(id){
     const index = this.categories.findIndex(item => item.id === id)
     if (index === -1) {
       throw new Error('categoria no encontrada')
