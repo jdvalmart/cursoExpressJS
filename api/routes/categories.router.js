@@ -3,23 +3,23 @@ const express = require ('express')
 
 const CategoryService = require('./../services/category.service')
 const validatorHandler = require('./../middlewares/validator.handler')
-const {createProductSchema, updateProductSchema, getProductSchema}= require('./../schemas/product.schema')
+const {createCategorySchema, updateCategorySchema, getCategorySchema}= require('./../schemas/category.schema')
 
 const router = express.Router()
 const service = new CategoryService()
 
 
-router.get('/', (req, res) =>{
-  const categories = service.find()
+router.get('/', async(req, res) =>{
+  const categories = await service.find()
   res.json(categories)
 })
 
 router.get('/:id',
-validatorHandler(getProductSchema,'params'),
+validatorHandler(getCategorySchema,'params'),
 async(req, res,next)=>{
   try {
     const {id}=req.params
-    const category = service.findOne(id)
+    const category = await service.findOne(id)
     res.json(category)
   } catch (error) {
     next(error)
@@ -27,16 +27,16 @@ async(req, res,next)=>{
 })
 
 router.post('/',
-validatorHandler(createProductSchema,'body'),
+validatorHandler(createCategorySchema,'body'),
 async(req, res) =>{
   const body = req.body
-  const newCategory = service.create(body)
+  const newCategory = await service.create(body)
   res.status(201).json(newCategory)
 })
 
 router.patch('/:id',
-  validatorHandler(getProductSchema, 'params'),
-  validatorHandler(updateProductSchema,'body'),
+  validatorHandler(getCategorySchema, 'params'),
+  validatorHandler(updateCategorySchema,'body'),
 async (req, res, next) => {
   const {id} = req.params
   const body = req.body
