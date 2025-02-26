@@ -27,7 +27,6 @@ app.get('/', (req, res)=>{
 })
 
 
-
 routerApi(app)
 
 app.use(logErrors)
